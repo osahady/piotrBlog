@@ -11,10 +11,26 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('home1');
+// });
 
+// Route::get('/contact', function(){
+//     return view('contact');
+// });
+
+Route::get('/', 'Home1Controller@home')->name('home1');
+Route::get('/contact', 'Home1Controller@contact')->name('contact');
+Route::resource('/posts', 'PostController');
+
+
+
+
+
+
+
+
+//scaffolding
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
