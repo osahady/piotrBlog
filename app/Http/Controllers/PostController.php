@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
+use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -26,6 +27,7 @@ class PostController extends Controller
     public function create()
     {
         //
+        return view('posts.create');
        
     }
 
@@ -35,9 +37,25 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePost $request)
     {
         //
+       $vd = $request->validated();
+        // dd($vd);
+    //    $bp = new BlogPost();
+    //    $bp->title = $request->input('title');
+    //    $bp->content = $request->content;
+    //    $bp->save();
+
+    // mass assignment
+    $bp = BlogPost::create($vd);
+
+    //    $request->session()->flash('status', 'Blog Post was created!');
+    //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
+    //مع إرسال اسم الجلسة في المعامل الأول وقيمة الجلسة في المعامل الثاني
+
+       return redirect()->route('posts.show', ['post'=>$bp->id])->with('status', 'Blog Post was created!');
+        
     }
 
     /**
@@ -46,9 +64,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
+        $request->session()->reflash();
         return view('posts.show', ['post'=> BlogPost::findOrFail($id)]);
     }
 
