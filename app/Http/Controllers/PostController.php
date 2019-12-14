@@ -64,10 +64,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show($id)
     {
         //
-        $request->session()->reflash();
+        // $request->session()->reflash();
         return view('posts.show', ['post'=> BlogPost::findOrFail($id)]);
     }
 
@@ -80,6 +80,8 @@ class PostController extends Controller
     public function edit($id)
     {
         //
+        $post = BlogPost::findOrFail($id);
+        return view('posts.edit', ['post' => $post]);
     }
 
     /**
@@ -89,9 +91,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePost $request, $id)
     {
         //
+        $post = BlogPost::findOrFail($id);
+        $vd = $request->validated();
+        $post->fill($vd);
+
+        $post->save();
+        return redirect()->route('posts.show', ['post'=>$post->id])->with('status', 'Blog post was updated!');
+        // $request->session()->flash('status', 'Blog post was updated!');
     }
 
     /**

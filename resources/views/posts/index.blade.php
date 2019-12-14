@@ -24,6 +24,7 @@
                         <p class="lead card-text">
                             {{ $post->content }}
                         </p>
+                        <a class="btn btn-outline-primary" href="{{ route('posts.edit', ['post'=>$post->id]) }}">Edit</a>
                     </div>
                     <div class="card-footer">
                         <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
