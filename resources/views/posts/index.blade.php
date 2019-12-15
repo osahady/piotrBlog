@@ -24,7 +24,20 @@
                         <p class="lead card-text">
                             {{ $post->content }}
                         </p>
-                        <a class="btn btn-outline-primary" href="{{ route('posts.edit', ['post'=>$post->id]) }}">Edit</a>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a class="btn btn-block btn-outline-primary" href="{{ route('posts.edit', ['post'=>$post->id]) }}">Edit</a>
+
+                            </div>
+                            <div class="col-sm-6">
+                                <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="card-footer">
                         <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>

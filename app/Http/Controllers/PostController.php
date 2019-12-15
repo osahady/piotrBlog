@@ -99,7 +99,7 @@ class PostController extends Controller
         $post->fill($vd);
 
         $post->save();
-        return redirect()->route('posts.show', ['post'=>$post->id])->with('status', 'Blog post was updated!');
+        return redirect()->route('posts.show', ['post'=>$post->id])->with('success', 'Blog post was updated!');
         // $request->session()->flash('status', 'Blog post was updated!');
     }
 
@@ -112,5 +112,10 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        $post = BlogPost::findOrFail($id);
+        // $post->delete();
+
+        BlogPost::destroy($id);
+        return redirect()->route('posts.index')->with('danger', 'The post has been deleted!');
     }
 }
