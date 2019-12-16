@@ -54,7 +54,7 @@ class PostController extends Controller
     //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
     //مع إرسال اسم الجلسة في المعامل الأول وقيمة الجلسة في المعامل الثاني
 
-       return redirect()->route('posts.show', ['post'=>$bp->id])->with('status', 'Blog Post was created!');
+       return redirect()->route('posts.show', ['post'=>$bp->id])->with('success', 'Blog Post was created!');
         
     }
 
