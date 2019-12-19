@@ -2,10 +2,16 @@
 
 namespace App;
 
+use App\Comment;
 use Illuminate\Database\Eloquent\Model;
 
 class BlogPost extends Model
 {
     //    protected $table = 'blogposts';
     protected $guarded = [];
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment');
+    }
 }
