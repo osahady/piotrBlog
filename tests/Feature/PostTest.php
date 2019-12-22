@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\BlogPost;
+use App\Comment;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 use Tests\TestCase;
@@ -19,25 +20,40 @@ class PostTest extends TestCase
         
     }
 
-    public function testSee1BlogPostWhenThereIs1()
+    public function testSee1BlogPostWhenThereIs1WithNoComments()
     {
         //Arrange
-        $post = new BlogPost();
-        $post->title = 'New title';
-        $post->content = 'Content of the blog post for testing purposes only';
-        $post->save();
+        $post = $this->createDummyBlogPost();
 
         //Act
         $response = $this->get('/posts');
 
         //Assert
-        $response->assertSeeText('New title');
+        $response->assertSeeText('New Title');
+        $response->assertSeeText('no comments');
 
         $this->assertDatabaseHas('blog_posts', [
-            'title' => 'New title'
+            'title' => 'New Title'
+        ]); 
+
+    }
+
+    public function testSee1BlogPostWithComments()
+    {
+        //arrange  إنشاء المقالة بواسطة تابع جاهز 
+        //createDummyBlogPost();
+        $post = $this->createDummyBlogPost();
+
+        //إنشاء أربعة تعليقات للمقالة بواسطة المعمل 
+        factory(Comment::class, 4)->create([
+            'blog_post_id' => $post->id
         ]);
 
-        
+        //Act
+        //هذه التعليمة تقوم بالذهاب إلى مسار فهرس المقالات
+        $response = $this->get('/posts');
+        //وهذه التعليمة تختبر وجود رقم أربعة في تلك الصفحة آنفة الذكر
+        $response->assertSeeText('4');
 
     }
 
@@ -77,10 +93,7 @@ class PostTest extends TestCase
 
     public function testUpdateValid()
     {
-        $post = new BlogPost();
-        $post->title = 'New Title';
-        $post->content = 'Content of the blog post';
-        $post->save();
+        $post = $this->createDummyBlogPost();
 
         $this->assertDatabaseHas('blog_posts', $post->toArray());
 
@@ -118,11 +131,14 @@ class PostTest extends TestCase
 
     private function createDummyBlogPost() : BlogPost
     {
-        $post = new BlogPost();
-        $post->title = 'New title';
-        $post->content = 'Content of the post to be deleted';
-        $post->save();
-        return $post;
+        // $post = new BlogPost();
+        // $post->title = 'New title';
+        // $post->content = 'Content of the post to be tested';
+        // $post->save();
+
+        return factory(BlogPost::class)->states('new-title')->create();
+
+        // return $post;
     }
 
     

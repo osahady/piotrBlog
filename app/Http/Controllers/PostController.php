@@ -26,8 +26,10 @@ class PostController extends Controller
         //     }
         // }
 
+        $posts = BlogPost::withCount('comments')->get();
         // dd(DB::getQueryLog());
-        return view('posts.index', ['posts' => BlogPost::all()]);
+        
+        return view('posts.index', compact('posts') );
     }
 
     /**

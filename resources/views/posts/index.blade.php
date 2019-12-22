@@ -16,13 +16,14 @@
                 <div class="card border-success">
                     <div class="card-header">
                         <h3>{{ Str::limit($post->title, 9) }}</h3>
+                        
                     </div>
 
                     <div class="card-body" >                    
                         <h4><a class="card-title" href="{{ route('posts.show', ['post' => $post->id]) }}">
                             {{ $post->title }}</a></h4>
                         <p class="lead card-text">
-                            {{ $post->content }}
+                            {{ Str::limit($post->content, 20) }}
                         </p>
                         <div class="row">
                             <div class="col-sm-6">
@@ -40,8 +41,16 @@
                         
                     </div>
                     <div class="card-footer">
-                        <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
-                    </div>
+                        <div class="d-flex">
+                            <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
+                            @if ($post->comments_count)
+                            <small class="ml-auto"><i class="fas fa-comment mr-1"></i>{{ $post->comments_count }}</small>
+
+                            @else   
+                                <small class="ml-auto"><i class="fas fa-comment mr-1"></i>no comments</small>
+                            @endif
+                        </div>
+                        </div>
                 </div>
            
            
