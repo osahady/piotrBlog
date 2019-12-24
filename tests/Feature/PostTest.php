@@ -59,12 +59,17 @@ class PostTest extends TestCase
 
     public function testStoreValid()
     {
+        
+
         $params = [
             'title' => 'Valid title',
             'content' => 'At least 10 characters'
         ];
 
-        $this->post('/posts', $params)
+       
+
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('success');
 
@@ -78,7 +83,8 @@ class PostTest extends TestCase
             'content' => 'y'
         ];
 
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
         
@@ -102,7 +108,8 @@ class PostTest extends TestCase
             'content' => 'Content of the blog post has been modified'
         ];
 
-        $this->put("/posts/{$post->id}", $params)
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('success');
 
@@ -121,7 +128,8 @@ class PostTest extends TestCase
 
         $this->assertDatabaseHas('blog_posts', $post->toArray());
 
-        $this->delete("/posts/{$post->id}")
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('danger');
 
