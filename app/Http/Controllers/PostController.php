@@ -30,7 +30,7 @@ class PostController extends Controller
         //     }
         // }
 
-        $posts = BlogPost::withCount('comments')->get();
+        $posts = BlogPost::withCount('comments')->paginate(15);
         // dd(DB::getQueryLog());
         
         return view('posts.index', compact('posts') );

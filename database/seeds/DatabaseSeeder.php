@@ -1,5 +1,7 @@
 <?php
 
+use App\BlogPost;
+use App\Comment;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -13,9 +15,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
-       factory(User::class)->states('osahady')->create();
+        if ($this->command->confirm('Do you wnat to refresh the database?')) {
+            $this->command->call('migrate:refresh');
+            $this->command->info('Database was refreshed');
+        }
+        $this->call([
+                        UsersTableSeeder::class, 
+                        BlogPostsTableSeeder::class, 
+                        CommentsTableSeeder::class
+                    ]);
 
-        factory(User::class, 20)->create();
     }
 }

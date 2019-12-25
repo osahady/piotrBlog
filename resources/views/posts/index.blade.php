@@ -15,7 +15,7 @@
                       
                 <div class="card border-success">
                     <div class="card-header">
-                        <h3>{{ Str::limit($post->title, 9) }}</h3>
+                        <h3>{{ Str::words($post->title, 3) }}</h3>
                         
                     </div>
 
@@ -59,5 +59,8 @@
         @endforelse
    
     
+    </div>
+    <div class="d-flex justify-content-center">
+       {{$posts->render()}}
     </div>
 @endsection
