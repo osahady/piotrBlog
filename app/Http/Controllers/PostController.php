@@ -7,6 +7,7 @@ use App\Comment;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -98,6 +99,10 @@ class PostController extends Controller
     {
         //
         $post = BlogPost::findOrFail($id);
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403, "You can't edit the post");
+        // }
+        $this->authorize('update-post', $post);
         return view('posts.edit', ['post' => $post]);
     }
 
@@ -112,6 +117,11 @@ class PostController extends Controller
     {
         //
         $post = BlogPost::findOrFail($id);
+        // if (Gate::denies('update-post', $post)) {
+        //     abort(403, "You can't update the post");
+        // }
+        $this->authorize('update-post', $post);
+
         $vd = $request->validated();
         $post->fill($vd);
 
@@ -130,9 +140,13 @@ class PostController extends Controller
     {
         //
         $post = BlogPost::findOrFail($id);
-        // $post->delete();
+        // if(Gate::denies('delete-post', $post)){
+        //     abort(403, 'You can not delete the post');
+        // }
+        $this->authorize('delete-post', $post);
+        $post->delete();
 
-        BlogPost::destroy($id);
+        // BlogPost::destroy($id);
         return redirect()->route('posts.index')->with('danger', 'The post has been deleted!');
     }
 }
