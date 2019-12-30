@@ -14,7 +14,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        'App\Model' => 'App\Policies\ModelPolicy',
+        'App\BlogPost' => 'App\Policies\BlogPostPolicy'
     ];
 
     /**
@@ -34,8 +35,14 @@ class AuthServiceProvider extends ServiceProvider
         //     return $user->id === $post->user_id;
         // });
 
-        Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
-        Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
+        // Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
+        // Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
+
+        //سنقوم بتعليق هذه التعليمة
+        //  وتحديد السياسة من مصفوفة
+        //  السياسيات في الأعلى
+        // Gate::resource('posts', 'App\Policies\BlogPostPolicy');
+        //posts.create, posts.view, posts.update, posts.delete
 
         // Gate::before(function($user, $ability){
         //     if($user->is_admin && in_array($ability, ['posts.update', 'posts.delete'])){

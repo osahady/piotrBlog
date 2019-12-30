@@ -6,14 +6,24 @@ use App\BlogPost;
 use App\Comment;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
+    //يقوم هذا الباني البرمجية الوسيطة
     public function __construct()
     {
+        //تقوم البرمجية الوسيطة بإعطاء المستخدمين المسجلين الموثوقين
+        // سماحية الوصول للوظائف التالية 
+        //إنشاء، تخزين، تحرير، تعديل، حذف
         $this->middleware('auth')->only(['create', 'store', 'edit', 'update', 'destroy']);
+        //يعني إذا لم تكن مسجل فلن تستطيع إضافة منشور
+        // أو التعديل عليه أو حتى حذفه
+
+        //تمّ اختصار اسم البرمجية الوسيطة عن طريق ملف kernal.php
+        //
     }
     /**
      * Display a listing of the resource.
@@ -44,7 +54,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        //هذه التعليمة تقوم باستدعاء
+        // صلاحية الإنشاء من سياسة المنشورات 
+        // $this->authorize(BlogPost::class);
+
         return view('posts.create');
        
     }
@@ -60,17 +73,25 @@ class PostController extends Controller
         //
        $vd = $request->validated();
         // dd($vd);
-    //    $bp = new BlogPost();
-    //    $bp->title = $request->input('title');
-    //    $bp->content = $request->content;
-    //    $bp->save();
+        //    $bp = new BlogPost();
+        //    $bp->title = $request->input('title');
+        //    $bp->content = $request->content;
+        //    $bp->save();
 
-    // mass assignment
-    $bp = BlogPost::create($vd);
+        //هذه التعليمة تعطينا المستخدم المسجل حاليًّا
+        $user = Auth::user();
+        
+        
+        // mass assignment
+        $bp = BlogPost::make($vd);
 
-    //    $request->session()->flash('status', 'Blog Post was created!');
-    //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
-    //مع إرسال اسم الجلسة في المعامل الأول وقيمة الجلسة في المعامل الثاني
+        // $this->authorize($bp);
+
+        $user->posts()->save($bp);
+
+        //    $request->session()->flash('status', 'Blog Post was created!');
+        //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
+        //مع إرسال اسم الجلسة في المعامل الأول وقيمة الجلسة في المعامل الثاني
 
        return redirect()->route('posts.show', ['post'=>$bp->id])->with('success', 'Blog Post was created!');
         
@@ -86,6 +107,8 @@ class PostController extends Controller
     {
         //
         // $request->session()->reflash();
+        $this->authorize(BlogPost::find($id));
+
         return view('posts.show', ['post'=> BlogPost::with('comments')->findOrFail($id)]);
     }
 
@@ -99,10 +122,43 @@ class PostController extends Controller
     {
         //
         $post = BlogPost::findOrFail($id);
-        // if (Gate::denies('update-post', $post)) {
+        //هذه التعليمة لإعطاء 
+        // أذونات المستخدمين بالتعديل على المنشور
+        //1) if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit the post");
         // }
-        $this->authorize('posts.update', $post);
+        // 2) $this->authorize('posts.update', $post);
+        // 3) $this->authorize('update', $post);
+
+        //هذا هو الشكل الأخير لاستدعاء
+        //  تابع في سياسة المنشورات
+        //تستطيع منصة اللارافيل معرفة التابع
+        //من خلال تابع المتحكم الطالب للسياسة
+        //يعني هنا يتم استدعاء السياسة في تابع التحرير
+        // فهذا يعني استدعاء تابع التعديل في صف السياسة
+        // Controller ===> Policy
+        //================================
+        // 'create'   ===> 'create'
+        //$this->authorize(BlogPost::class);
+
+        // 'store'    ===> 'create'
+        // $this->authorize($bp);
+
+        // 'show'     ===> 'view' === read
+        // $this->authorize(BlogPost::find($id));
+
+        // 'edit'     ===> 'update'
+        // $this->authorize($post);
+
+        // 'update'   ===> 'update' 
+        // $this->authorize($post);
+
+        // 'destroy'  ===> 'delete'
+        // $this->authorize($post);
+               
+        $this->authorize($post);
+
+
         return view('posts.edit', ['post' => $post]);
     }
 
@@ -120,7 +176,15 @@ class PostController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't update the post");
         // }
-        $this->authorize('posts.update', $post);
+
+        //بعد تسجيل سياسة المنشورات في مصفوفة السياسات
+        // صار بإمكاننا استدعاء أي تابع ضمن صف سياسة المنشورات 
+       //عن طريق اسمه بالشكل التالي
+        // $this->authorize('update', $post);
+
+        //سيتم تلقائيا تحديد التابع
+        //  من خلال معرفة التابع الطالب للسياسة من المتحكم
+        $this->authorize($post);
 
         $vd = $request->validated();
         $post->fill($vd);
@@ -143,7 +207,11 @@ class PostController extends Controller
         // if(Gate::denies('delete-post', $post)){
         //     abort(403, 'You can not delete the post');
         // }
-        $this->authorize('posts.delete', $post);
+        // $this->authorize('posts.delete', $post);
+        //طريقة مختصرة لاستدعاء السياسة
+        //  فورا من دون تحديد اسم التابع
+        $this->authorize($post);
+
         $post->delete();
 
         // BlogPost::destroy($id);

@@ -30,7 +30,9 @@ class BlogPostPolicy
      */
     public function view(User $user, BlogPost $blogPost)
     {
-        //
+        //هذا يعني أن لكل مستخدم أحقية رؤية منشوراته فقط
+        //أو يمكن للمدير أيضا رؤية المنشورات أيضا
+        return $user->id == $blogPost->user_id || $user->is_admin;
     }
 
     /**
@@ -39,9 +41,13 @@ class BlogPostPolicy
      * @param  \App\User  $user
      * @return mixed
      */
+    //قدرة (صلاحية)  الإنشاء للمنشور
     public function create(User $user)
     {
-        //
+        //تعطي صلاحية للمدير فقط بالنشر
+        // return $user->is_admin;
+
+        return true;
     }
 
     /**
@@ -53,7 +59,7 @@ class BlogPostPolicy
      */
     public function update(User $user, BlogPost $blogPost)
     {
-        dd('doing updating');
+        //يعني أن هذا المنشور هو ملك لك
         return $user->id == $blogPost->user_id;
     }
 
@@ -66,7 +72,7 @@ class BlogPostPolicy
      */
     public function delete(User $user, BlogPost $blogPost)
     {
-        dd('doing deleting');
+        //يعني أن هذا المنشور هو ملك لك
         return $user->id == $blogPost->user_id;
     }
 
