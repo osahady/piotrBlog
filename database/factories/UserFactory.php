@@ -34,3 +34,11 @@ $factory->state(User::class, 'osahady', function(Faker $faker){
         'is_admin' => true
     ];
 });
+
+$factory->state(User::class, 'hajar', function(Faker $faker){
+    return [
+        'name' => 'Hajar Abdelhady',
+        'email' => 'hajar@gmail.com',
+        
+    ];
+});
