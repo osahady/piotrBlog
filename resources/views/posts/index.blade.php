@@ -27,15 +27,24 @@
                         </p>
                         <div class="row">
                             <div class="col-sm-6">
-                                <a class="btn btn-block btn-outline-primary" href="{{ route('posts.edit', ['post'=>$post->id]) }}">Edit</a>
+                                @can('update', $post)
+                                    <a class="btn btn-block btn-outline-primary" 
+                                    href="{{ route('posts.edit', ['post'=>$post->id]) }}">
+                                        Edit
+                                    </a>       
+                                @endcan
+                                
 
                             </div>
                             <div class="col-sm-6">
-                                <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
-                                </form>
+                                @can('delete', $post)                                  
+                                
+                                    <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
+                                    </form>
+                                @endcan
                             </div>
                         </div>
                         
