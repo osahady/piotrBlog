@@ -32,6 +32,12 @@ Route::resource('/posts', 'PostController');
 
 Route::get('/dashboard', 'PostController@dashboard')->name('dashboard');
 
+//تم إضافة البرمجية الوسيطة لحماية المسار
+// فلن يستطيع المتطفل (المستعبط) الذهاب إلى المسار 
+// حتى لو كتبه 
+Route::get('/secret', 'Home1Controller@secret')
+->name('secret')
+->middleware('can:home1.secret');
 
 
 
