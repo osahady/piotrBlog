@@ -45,6 +45,9 @@
                                         <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
                                     </form>
                                 @endcan
+                                @cannot('delete', $post)                                
+                                    <button class="btn btn-outline-dark btn-block" disabled>Delete</button>                                
+                                @endcannot
                             </div>
                         </div>
                         
