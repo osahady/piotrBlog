@@ -42,9 +42,19 @@ class PostController extends Controller
         //     }
         // }
 
+        //هذا يسمى النطاق المحلي 
+        //local query scope
+        //orderBy('created_at', 'desc')
+        // $posts = BlogPost::withCount('comments')->orderBy('created_at', 'desc' )->paginate(15);
+        //تمت الاستعاضة عن النطاق المحلي بالنطاق العالمي
+        //global query scope
+        //وذلك بتطبيق الاتفاقية في صف LatestScope
+        //وتسجيل النطاق العالمي في تابع الإقلاع
+        //الخاص بنموذج الجدول عبر التعليمة التالية
+        // static::addGlobalScope(new LatestScope);
         $posts = BlogPost::withCount('comments')->paginate(15);
-        // dd(DB::getQueryLog());
         
+        // dd(DB::getQueryLog());
         return view('posts.index', compact('posts') );
     }
 
