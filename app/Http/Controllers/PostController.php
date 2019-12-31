@@ -84,6 +84,7 @@ class PostController extends Controller
     {
         //
        $vd = $request->validated();
+       $vd['user_id'] = $request->user()->id;
         // dd($vd);
         //    $bp = new BlogPost();
         //    $bp->title = $request->input('title');
@@ -91,15 +92,18 @@ class PostController extends Controller
         //    $bp->save();
 
         //هذه التعليمة تعطينا المستخدم المسجل حاليًّا
-        $user = Auth::user();
-        
-        
+        // $user = Auth::user(); 
+        //ويمكن الاستعاضة عنها بالتابع الموجود في الطلب الحالي
+        //حيث يعطينا المستخدم المسجل حاليًّا
+        // $request->user() 
+
         // mass assignment
-        $bp = BlogPost::make($vd);
+        $bp = BlogPost::create($vd);
+        
 
         // $this->authorize($bp);
 
-        $user->posts()->save($bp);
+        // $user->posts()->save($bp);
 
         //    $request->session()->flash('status', 'Blog Post was created!');
         //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
