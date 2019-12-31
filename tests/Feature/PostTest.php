@@ -99,7 +99,12 @@ class PostTest extends TestCase
 
     public function testUpdateValid()
     {
-        $post = $this->createDummyBlogPost();
+        //كلمة هذا تشير إلى عنصر من الصف الحالي أو مورثه
+        // تم إنشاء تابع في الصف المورث TestCase
+        //تم هنا استدعاء هذا التابع هنا لإنشاء مستخدم 
+        //عبر المعمل factory(User::class)->create()
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
         $this->assertDatabaseHas('blog_posts', $post->toArray());
 
@@ -108,7 +113,7 @@ class PostTest extends TestCase
             'content' => 'Content of the blog post has been modified'
         ];
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->put("/posts/{$post->id}", $params)
             ->assertStatus(302)
             ->assertSessionHas('success');
@@ -123,12 +128,12 @@ class PostTest extends TestCase
 
     public function testDelete()
     {
-        
-        $post = $this->createDummyBlogPost();
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
         $this->assertDatabaseHas('blog_posts', $post->toArray());
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('danger');
@@ -138,14 +143,22 @@ class PostTest extends TestCase
         $this->assertSoftDeleted('blog_posts', $post->toArray());
     }
 
-    private function createDummyBlogPost() : BlogPost
+    private function createDummyBlogPost($userId = null) : BlogPost
     {
         // $post = new BlogPost();
         // $post->title = 'New title';
         // $post->content = 'Content of the post to be tested';
         // $post->save();
 
-        return factory(BlogPost::class)->states('new-title')->create();
+        return factory(BlogPost::class)->states('new-title')->create(
+            [
+                //ثنائية الاستفهام وجدت في الإصدار السابع من بي اتس بي
+                //وتعني إذا كان الشرط لا يؤول للعدم فضع قيمته
+                //وإذا كان يؤول للعدم فضع القيمة 
+                //التي تأتي بعد إشارتي الاستفهام
+                'user_id' => $userId ?? $this->user()->id,
+            ]
+        );
 
         // return $post;
     }
