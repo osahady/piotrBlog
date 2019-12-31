@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 use App\Comment;
 use App\Http\Requests\StorePost;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,17 @@ class PostController extends Controller
         
         return view('posts.index', compact('posts') );
     }
+
+    public function dashboard()
+    {
+        //جلب المستخدم المسجل حاليا في الموقع
+        $user = Auth::user();
+        $posts = BlogPost::withCount('comments')->where('user_id', '=', $user->id)->paginate(15);
+        // dd(DB::getQueryLog());
+        
+        return view('posts.index', compact('posts') );
+    }
+    
 
     /**
      * Show the form for creating a new resource.
