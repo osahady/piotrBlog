@@ -64,7 +64,7 @@
                                 <small class="ml-auto"><i class="fas fa-comment mr-1"></i>no comments</small>
                             @endif
                         </div>
-                        </div>
+                    </div>
                 </div>
            
            
@@ -75,6 +75,9 @@
     
     </div>
     <div class="d-flex justify-content-center">
-       {{$posts->render()}}
+        <div>
+
+            {{$posts->render()}}
+        </div>
     </div>
 @endsection

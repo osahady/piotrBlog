@@ -13,10 +13,7 @@ class ChangeBlogpostsTableName extends Migration
      */
     public function up()
     {
-        Schema::table('blogposts', function (Blueprint $table) {
-            //
             Schema::rename('blogposts', 'blog_posts');
-        });
     }
 
     /**
@@ -26,10 +23,8 @@ class ChangeBlogpostsTableName extends Migration
      */
     public function down()
     {
-        Schema::table('blogposts', function (Blueprint $table) {
-            //
             Schema::rename('blog_posts', 'blogposts');
 
-        });
+        
     }
 }

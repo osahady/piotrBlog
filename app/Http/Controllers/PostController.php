@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
-use App\Comment;
+// use App\Comment;
 use App\Http\Requests\StorePost;
-use App\User;
-use Illuminate\Http\Request;
+// use App\User;
+// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {

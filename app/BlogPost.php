@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Comment;
+// use App\Comment;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,18 +13,25 @@ class BlogPost extends Model
     //    protected $table = 'blogposts';
     protected $guarded = [];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function comments()
     {
         return $this->hasMany('App\Comment');
     }
+
+   
 
     //deleting model event
     public static function boot()
     {
         parent::boot();
 
-        //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
-        //عبر تنفيذ الواجهة العالمية Scope
+        // //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
+        // //عبر تنفيذ الواجهة العالمية Scope
         static::addGlobalScope(new LatestScope);
 
         static::deleting(function(BlogPost $blogPost){
@@ -36,8 +43,5 @@ class BlogPost extends Model
         });
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+   
 }
