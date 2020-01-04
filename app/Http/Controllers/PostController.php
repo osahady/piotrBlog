@@ -52,7 +52,7 @@ class PostController extends Controller
         //وتسجيل النطاق العالمي في تابع الإقلاع
         //الخاص بنموذج الجدول عبر التعليمة التالية
         // static::addGlobalScope(new LatestScope);
-        $posts = BlogPost::withCount('comments')->paginate(15);
+        $posts = BlogPost::latest()->withCount('comments')->paginate(15);
         
         // dd(DB::getQueryLog());
         return view('posts.index', compact('posts') );
@@ -134,6 +134,13 @@ class PostController extends Controller
         //
         // $request->session()->reflash();
         $this->authorize(BlogPost::find($id));
+
+        //هذه إحدى طرق استدعاء الاستعلام المحلي في لارافيل
+        // وهناك طريقة أخرى أسهل منها وهي استدعاء الاستعلام المحلي
+        // في صف المنشور مباشرة عند إنشاء العلاقة
+        // return view('posts.show', ['post'=> BlogPost::with(['comments'=> function($query){
+        //     $query->latest();
+        // }])->findOrFail($id)]);
 
         return view('posts.show', ['post'=> BlogPost::with('comments')->findOrFail($id)]);
     }

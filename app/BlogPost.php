@@ -18,9 +18,17 @@ class BlogPost extends Model
         return $this->belongsTo('App\User');
     }
 
+    //تم استدعاء الاستعلام المحلي مباشرة على العلاقة
+    //كيما يتم جلب المنشورات مرتبة حسب الزمن الجديد أولاً
+
     public function comments()
     {
-        return $this->hasMany('App\Comment');
+        return $this->hasMany('App\Comment')->latest();
+    }
+
+    public function scopeLatest(Builder $query)
+    {
+        return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
    
@@ -32,7 +40,7 @@ class BlogPost extends Model
 
         // //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
         // //عبر تنفيذ الواجهة العالمية Scope
-        static::addGlobalScope(new LatestScope);
+        // static::addGlobalScope(new LatestScope);
 
         static::deleting(function(BlogPost $blogPost){
             $blogPost->comments()->delete();

@@ -43,6 +43,7 @@ Route::get('/secret', 'Home1Controller@secret')
 
 
 
+
 //scaffolding
 Auth::routes(); //gives 11 routes and 5 controllers
 
