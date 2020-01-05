@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 // use App\Comment;
 use App\Http\Requests\StorePost;
+use App\User;
 // use App\User;
 // use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +55,15 @@ class PostController extends Controller
         // static::addGlobalScope(new LatestScope);
         $posts = BlogPost::latest()->withCount('comments')->paginate(15);
         $mostCommented = BlogPost::mostCommented()->take(5)->get();
+        $mostActive = User::withMostBlogPosts()->take(5)->get();
+        $mostActiveLastMonth = User::withMostBlogPostsLastMonth()->take(5)->get();
         // dd(DB::getQueryLog());
-        return view('posts.index', compact('posts', 'mostCommented') );
+        return view('posts.index', 
+                    compact('posts', 
+                            'mostCommented', 
+                            'mostActive', 
+                            'mostActiveLastMonth') 
+                );
     }
 
     public function dashboard()

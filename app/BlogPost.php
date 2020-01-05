@@ -3,6 +3,8 @@
 namespace App;
 
 // use App\Comment;
+
+use App\Scopes\DeletedAdminScope;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,11 +44,11 @@ class BlogPost extends Model
     //deleting model event
     public static function boot()
     {
+        static::addGlobalScope(new DeletedAdminScope);
         parent::boot();
 
         // //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
         // //عبر تنفيذ الواجهة العالمية Scope
-        // static::addGlobalScope(new LatestScope);
 
         static::deleting(function(BlogPost $blogPost){
             $blogPost->comments()->delete();

@@ -10,15 +10,31 @@
     <div class="col-8">
         @forelse ($posts as $post)
         
-        <div class="card border-success mb-3">
-            <div class="card-header">
-                <h3>{{ Str::words($post->title, 3) }}</h3>
+        <div class="card {{ $post->trashed() ? 'border-warning' : 'border-success' }} mb-3">
+            <div class="card-header {{ $post->trashed() ? 'bg-danger' : '' }}">
+                <h3>
+                    @if ($post->trashed())
+                        <del>
+                    @endif
+                    {{ Str::words($post->title, 3) }}
+                    @if ($post->trashed())
+                        </del>
+                    @endif
+                </h3>
                     
             </div>
             
             <div class="card-body" >                    
-                <h4><a class="card-title" href="{{ route('posts.show', ['post' => $post->id]) }}">
-                    {{ $post->title }}</a></h4>
+                <h4>
+                    @if ($post->trashed())
+                        <del>
+                    @endif
+                    <a class="card-title {{ $post->trashed()? 'text-muted' : '' }}" href="{{ route('posts.show', ['post' => $post->id]) }}">
+                    {{ $post->title }}</a>
+                    @if ($post->trashed())
+                        </del>
+                    @endif
+                </h4>
                     <p class="lead card-text">
                         {{ Str::limit($post->content, 20) }}
                     </p>
@@ -34,6 +50,8 @@
                         
                     </div>
                     <div class="col-sm-6">
+                        @if (!$post->trashed())
+                            
                         @can('delete', $post)                                  
                         
                         <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
@@ -45,6 +63,8 @@
                                 @cannot('delete', $post)                                
                                 <button class="btn btn-outline-dark btn-block" disabled>Delete</button>                                
                             @endcannot
+                        @endif
+
                         </div>
                     </div>
                     
@@ -73,6 +93,7 @@
     </div>
             
     <div class="col-4">
+        {{-- most active posts (having most comments) --}}
         <div class="card">
            
             <div class="card-body">
@@ -93,7 +114,49 @@
                 </ul>
                 
             </div>
-        </div>        
+        </div> 
+        {{-- most active users  --}}
+        <div class="card my-3">
+           
+            <div class="card-body">
+                <h5 class="card-title">Most Active</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    What Active users doing?
+                </h6>
+                <ul class="list-group">
+                    @foreach ($mostActive as $topUser)
+                    <li class="list-group-item">
+
+                        {{ $topUser->name }}
+                        
+                    </li>
+                        
+                    @endforeach
+                </ul>
+                
+            </div>
+        </div>
+        {{-- most active users last month --}}
+        <div class="card my-3">
+           
+            <div class="card-body">
+                <h5 class="card-title">Most Active Users</h5>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Active users last month
+                </h6>
+                <ul class="list-group">
+                    @foreach ($mostActiveLastMonth as $user)
+                    <li class="list-group-item">
+
+                        {{ $user->name }}
+                        
+                    </li>
+                        
+                    @endforeach
+                </ul>
+                
+            </div>
+        </div>         
     </div>
 </div>
 
