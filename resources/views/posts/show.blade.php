@@ -7,9 +7,10 @@
     <small>Add at {{ $post->created_at->diffForHumans() }}</small>
 
     @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20 )
-        @component('badge', ['type' => 'primary'])
+    {{-- تم تعريف المكون في ملف AppServiceProvider --}}
+        @badge
             Brand New Post!
-        @endcomponent
+        @endbadge
     @else
     <strong> old </strong>
 
