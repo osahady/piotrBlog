@@ -53,9 +53,9 @@ class PostController extends Controller
         //الخاص بنموذج الجدول عبر التعليمة التالية
         // static::addGlobalScope(new LatestScope);
         $posts = BlogPost::latest()->withCount('comments')->paginate(15);
-        
+        $mostCommented = BlogPost::mostCommented()->take(5)->get();
         // dd(DB::getQueryLog());
-        return view('posts.index', compact('posts') );
+        return view('posts.index', compact('posts', 'mostCommented') );
     }
 
     public function dashboard()

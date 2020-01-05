@@ -5,6 +5,7 @@ namespace App;
 // use App\Comment;
 use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BlogPost extends Model
@@ -31,6 +32,11 @@ class BlogPost extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
+    public function scopeMostCommented(Builder $query)
+    {
+        //comments_count
+        return $query->withCount('comments')->orderBy('comments_count', 'desc');
+    }
    
 
     //deleting model event
