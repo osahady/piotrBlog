@@ -1,20 +1,31 @@
 @extends('layout')
 
 @section('content')
-    <h3>{{ $post->title }}</h3>
+    <h3>
+        {{ $post->title }}
+        {{--boot function تم تعريف المكون في ملف AppServiceProvider --}}
+        {{--  Blade::component('components.badge', 'badge'); --}}
+        @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
+            Brand New Post!
+        @endbadge   
+    
+         
+    
+    </h3>
     <p>{{ $post->content }}</p>
 
-    <small>Add at {{ $post->created_at->diffForHumans() }}</small>
+    {{-- <small>Add at {{ $post->created_at->diffForHumans() }}</small>  --}}
 
-    @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 20 )
-    {{-- تم تعريف المكون في ملف AppServiceProvider --}}
-        @badge
-            Brand New Post!
-        @endbadge
-    @else
-    <strong> old </strong>
+    @updated(['date' => $post->created_at, 'name' => $post->user->name])
+                            {{--what ever here is shown as a value to slot variable  --}}
+                            <i class="far fa-clock mr-2"></i>
+    @endupdated
 
-    @endif
+    @updated(['date' => $post->updated_at])
+        updated
+    @endupdated
+
+
 
     <h4>Comments</h4>
 
@@ -22,9 +33,13 @@
     <div class="media mb-5">
         <i class="fa fa-user fa-2x mr-3 mt-2 bg-secondary rounded p-2"></i>
          <div class="media-body">            
-             <small class="text-muted">
+             {{-- <small class="text-muted">
                  added {{ $comment->created_at->diffForHumans() }}
-             </small>
+             </small> --}}
+             @updated(['date' => $post->created_at])
+                            {{--what ever here is shown as a value to slot variable  --}}
+                            <i class="far fa-clock mr-2"></i>
+             @endupdated
              <div>{{ $comment->content }}</div>
          </div>
      </div> 

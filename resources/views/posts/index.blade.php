@@ -71,8 +71,13 @@
                 </div>
                 <div class="card-footer">
                     <div class="d-flex">
-                        <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
-                        <small> &nbsp; By: {{ $post->user->name }}</small>
+                        {{-- <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
+                        <small> &nbsp; By: {{ $post->user->name }}</small> --}}
+
+                        @updated(['date' => $post->created_at, 'name' => $post->user->name])
+                            {{--what ever here is shown as a value to slot variable  --}}
+                            <i class="far fa-clock mr-2"></i>
+                        @endupdated
 
                         @if ($post->comments_count)
                         <small class="ml-auto"><i class="fas fa-comment mr-1"></i>{{ $post->comments_count }}</small>
