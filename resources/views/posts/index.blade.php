@@ -99,69 +99,46 @@
             
     <div class="col-4">
         {{-- most active posts (having most comments) --}}
-        <div class="card">
-           
-            <div class="card-body">
-                <h5 class="card-title">Most Commented</h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    What People are currently talking about?
-                </h6>
-                <ul class="list-group">
-                    @foreach ($mostCommented as $topPost)
+
+        @card(['title' => 'Most Commented'])
+            @slot('subtitle')
+                What People are currently talking about?                
+            @endslot
+            @slot('items')
+                @foreach ($mostCommented as $topPost)
                     <li class="list-group-item">
                         <a href="{{ route('posts.show', $topPost->id) }}" >
 
                             {{ $topPost->title }}
                         </a>
-                    </li>
-                        
-                    @endforeach
-                </ul>
-                
-            </div>
-        </div> 
+                    </li>                    
+                @endforeach
+            @endslot
+        
+        @endcard
+      
+       
         {{-- most active users  --}}
-        <div class="card my-3">
-           
-            <div class="card-body">
-                <h5 class="card-title">Most Active</h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    What Active users doing?
-                </h6>
-                <ul class="list-group">
-                    @foreach ($mostActive as $topUser)
-                    <li class="list-group-item">
+        
 
-                        {{ $topUser->name }}
-                        
-                    </li>
-                        
-                    @endforeach
-                </ul>
-                
-            </div>
-        </div>
+        @card(['title' => 'Most Active Users'])
+            @slot('subtitle')
+                Writters are currently talking about?
+            @endslot
+            @slot('items', collect($mostActive)->pluck('name'))
+        
+        @endcard
         {{-- most active users last month --}}
-        <div class="card my-3">
-           
-            <div class="card-body">
-                <h5 class="card-title">Most Active Users</h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    Active users last month
-                </h6>
-                <ul class="list-group">
-                    @foreach ($mostActiveLastMonth as $user)
-                    <li class="list-group-item">
 
-                        {{ $user->name }}
-                        
-                    </li>
-                        
-                    @endforeach
-                </ul>
+
+        @card(['title' => 'Most Active Users Last Month'])
+            @slot('subtitle')
+            Active users last month
+            @endslot
+            @slot('items', collect($mostActiveLastMonth)->pluck('name'))
+        
+        @endcard
                 
-            </div>
-        </div>         
     </div>
 </div>
 
