@@ -10,6 +10,7 @@ use Tests\TestCase;
 
 class PostTest extends TestCase
 {
+    
     use RefreshDatabase;
    
     public function testNoBlogPostWhenNothingInDatabase()

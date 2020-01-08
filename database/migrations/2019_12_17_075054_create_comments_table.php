@@ -20,8 +20,10 @@ class CreateCommentsTable extends Migration
             if (env('DB_CONNECTION') === 'sqlite_testing') {
                 # code...
                 $table->text('content')->default('');
+            }else{
+
+                $table->text('content');
             }
-            $table->text('content');
 
 
             $table->unsignedBigInteger('blog_post_id')->index();
