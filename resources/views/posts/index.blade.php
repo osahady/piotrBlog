@@ -8,78 +8,72 @@
     @endforeach --}}
 <div class="row">
     <div class="col-8">
-        @forelse ($posts as $post)
-        
-        <div class="card {{ $post->trashed() ? 'border-warning' : 'border-success' }} mb-3">
-            <div class="card-header {{ $post->trashed() ? 'bg-danger' : '' }}">
-                <h3>
-                    @if ($post->trashed())
-                        <del>
-                    @endif
-                    {{ Str::words($post->title, 3) }}
-                    @if ($post->trashed())
-                        </del>
-                    @endif
-                </h3>
-                    
-            </div>
-            
-            <div class="card-body" >                    
-                <h4>
-                    @if ($post->trashed())
-                        <del>
-                    @endif
-                    <a class="card-title {{ $post->trashed()? 'text-muted' : '' }}" href="{{ route('posts.show', ['post' => $post->id]) }}">
-                    {{ $post->title }}</a>
-                    @if ($post->trashed())
-                        </del>
-                    @endif
-                </h4>
+        @forelse ($posts as $post)        
+            <div class="card mb-3">
+                <div class="card-header {{ $post->trashed() ? 'bg-danger' : '' }}">
+                    <h3>
+                        @if ($post->trashed())
+                            <del>
+                        @endif
+                        {{ Str::words($post->title, 3) }}
+                        @if ($post->trashed())
+                            </del>
+                        @endif
+                    </h3>
+                        
+                </div><!-- .card-header -->
+                
+                <div class="card-body" >                    
+                    <h4>
+                        @if ($post->trashed())
+                            <del>
+                        @endif
+                        <a class="card-title {{ $post->trashed()? 'text-muted' : '' }}" href="{{ route('posts.show', ['post' => $post->id]) }}">
+                        {{ $post->title }}</a>
+                        @if ($post->trashed())
+                            </del>
+                        @endif
+                    </h4>
                     <p class="lead card-text">
                         {{ Str::limit($post->content, 20) }}
                     </p>
                     <div class="row">
                         <div class="col-sm-6">
-                        {{-- ليس هناك من داعٍ لفحص الصلاحيات في حال 
-                            كون المستخدم غير مسجل
-                            وبالتي سيتم تحسين أداء الموقع وتوفير عمليات
-                            فحص لا داعي لها --}}
-                        @auth <!-- التأكد من أن المستخدم مسجل -->
-                            
-                            @can('update', $post)
-                                <a class="btn btn-block btn-outline-primary" 
-                                href="{{ route('posts.edit', ['post'=>$post->id]) }}">
-                                Edit
-                                </a>       
-                            @endcan
-                        @endauth
-                        
-                        
-                
-                    <div class="col-sm-6">
-                    @auth
-                        
-                    
-                        @if (!$post->trashed())
-                            
-                        @can('delete', $post)                                  
-                        
-                        <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
-                                </form>
+                            {{-- ليس هناك من داعٍ لفحص الصلاحيات في حال 
+                                كون المستخدم غير مسجل
+                                وبالتي سيتم تحسين أداء الموقع وتوفير عمليات
+                                فحص لا داعي لها --}}
+                            @auth
+                                @can('update', $post)
+                                    <a class="btn btn-block btn-outline-primary" 
+                                    href="{{ route('posts.edit', ['post'=>$post->id]) }}">
+                                        Edit
+                                    </a>       
                                 @endcan
-                                @cannot('delete', $post)                                
-                                <button class="btn btn-outline-dark btn-block" disabled>Delete</button>                                
-                            @endcannot
-                        @endif
-                    @endauth
+                            @endauth
+                        
+                        </div>
+                
+                        <div class="col-sm-6">
+                            @auth
+                                @if (!$post->trashed())                            
+                                    @can('delete', $post)
+                                        <form action="{{ route('posts.destroy', ['post'=>$post->id]) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-outline-danger btn-block" type="submit">Delete</button>
+                                        </form>
+                                    @endcan
+                                    @cannot('delete', $post)                                
+                                        <button class="btn btn-outline-dark btn-block" disabled>Delete</button>                                
+                                    @endcannot
+                                @endif
+                            @endauth
 
                         </div>
-                    </div>
                     
-                </div>
+                    </div>
+                </div><!-- .card-body -->
                 <div class="card-footer">
                     <div class="d-flex">
                         {{-- <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
@@ -99,17 +93,17 @@
                         @else   
                             <small class="ml-auto"><i class="fas fa-comment mr-1"></i>no comments</small>
                             @endif
-                        </div>
                     </div>
-            </div>
-                    
-           
+                </div><!-- .card-footer -->
+            </div> <!--.card -->
         @empty
-        <p>No blog posts yet!</p>
+            <p>No blog posts yet!</p>
         @endforelse
+    </div><!-- .col-8 -->
+
                     
                     
-    </div>
+
             
     <div class="col-4">
         {{-- most active posts (having most comments) --}}
@@ -153,8 +147,8 @@
         
         @endcard
                 
-    </div>
-</div>
+    </div><!-- col-4 -->
+</div><!-- .row -->
 
     <div class="d-flex justify-content-center">
         <div>

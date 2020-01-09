@@ -3,14 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
-// use App\Comment;
 use App\Http\Requests\StorePost;
 use App\User;
-// use App\User;
-// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\DB;
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -34,14 +30,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
-        // DB::connection()->enableQueryLog();
-        // $posts = BlogPost::with('comments')->get();
-        // foreach ($posts as $post) {
-        //     foreach ($post->comments as $comment) {
-        //         echo $comment->content;
-        //     }
-        // }
+        
 
         //هذا يسمى النطاق المحلي 
         //local query scope
@@ -56,9 +45,23 @@ class PostController extends Controller
 
         //استدعاء المستخدمين سيخزن البيانات في الكاش
         $posts = BlogPost::latest()->withCount('comments')->with('user')->get();
-        $mostCommented = BlogPost::mostCommented()->take(5)->get();
-        $mostActive = User::withMostBlogPosts()->take(5)->get();
-        $mostActiveLastMonth = User::withMostBlogPostsLastMonth()->take(5)->get();
+        // $mostCommented = BlogPost::mostCommented()->take(5)->get();
+        //أسلوب التخزين المؤقت يعتمد على المفتاح والقيمة
+        // المفتاح هنا هو المعامل الأول للتابع تذكر
+        // حيث يقوم الكاش بتفحص المفتاح أولا فإن وجد البيانات
+        //وإلا قام باستدعاء التابع المجهول 
+        // الذي بدوره يستدعي التعليمة التي تقوم بالتخاطب مع قاعدة البيانات
+
+        $mostCommented = Cache::remember('mostComm', now()->addMinutes(60),  function(){
+           return BlogPost::mostCommented()->take(5)->get();
+        });
+        $mostActive = Cache::remember('mostActive', now()->addMinutes(60), function(){
+            return User::withMostBlogPosts()->take(5)->get();
+        });
+
+        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', now()->addMinutes(60), function(){
+            return User::withMostBlogPostsLastMonth()->take(5)->get();
+        });
         // dd(DB::getQueryLog());
         return view('posts.index', 
                     compact('posts', 
@@ -143,8 +146,11 @@ class PostController extends Controller
     {
         //
         // $request->session()->reflash();
-        $this->authorize(BlogPost::find($id));
+        $this->authorize(BlogPost::find($id));//هذا يستدعي مزود التوثيق  الذي يستدعي سياسة المنشورات
 
+        $blogPost = Cache::remember("blog-post-{$id}", 60, function() use ($id){
+            return BlogPost::with('comments')->findOrFail($id);
+        });
         //هذه إحدى طرق استدعاء الاستعلام المحلي في لارافيل
         // وهناك طريقة أخرى أسهل منها وهي استدعاء الاستعلام المحلي
         // في صف المنشور مباشرة عند إنشاء العلاقة
@@ -152,7 +158,7 @@ class PostController extends Controller
         //     $query->latest();
         // }])->findOrFail($id)]);
 
-        return view('posts.show', ['post'=> BlogPost::with('comments')->findOrFail($id)]);
+        return view('posts.show', ['post'=> $blogPost]);
     }
 
     /**
@@ -165,6 +171,9 @@ class PostController extends Controller
     {
         //
         $post = BlogPost::findOrFail($id);
+
+        /*
+        
         //هذه التعليمة لإعطاء 
         // أذونات المستخدمين بالتعديل على المنشور
         //1) if (Gate::denies('update-post', $post)) {
@@ -198,6 +207,8 @@ class PostController extends Controller
 
         // 'destroy'  ===> 'delete'
         // $this->authorize($post);
+
+        */
                
         $this->authorize($post);
 
