@@ -40,16 +40,26 @@
                     </p>
                     <div class="row">
                         <div class="col-sm-6">
+                        {{-- ليس هناك من داعٍ لفحص الصلاحيات في حال 
+                            كون المستخدم غير مسجل
+                            وبالتي سيتم تحسين أداء الموقع وتوفير عمليات
+                            فحص لا داعي لها --}}
+                        @auth <!-- التأكد من أن المستخدم مسجل -->
+                            
                             @can('update', $post)
-                            <a class="btn btn-block btn-outline-primary" 
-                            href="{{ route('posts.edit', ['post'=>$post->id]) }}">
-                            Edit
-                        </a>       
-                        @endcan
+                                <a class="btn btn-block btn-outline-primary" 
+                                href="{{ route('posts.edit', ['post'=>$post->id]) }}">
+                                Edit
+                                </a>       
+                            @endcan
+                        @endauth
                         
                         
-                    </div>
+                
                     <div class="col-sm-6">
+                    @auth
+                        
+                    
                         @if (!$post->trashed())
                             
                         @can('delete', $post)                                  
@@ -64,6 +74,7 @@
                                 <button class="btn btn-outline-dark btn-block" disabled>Delete</button>                                
                             @endcannot
                         @endif
+                    @endauth
 
                         </div>
                     </div>
@@ -74,6 +85,9 @@
                         {{-- <small><i class="far fa-clock mr-2"></i>{{ $post->created_at->diffForHumans() }}</small>
                         <small> &nbsp; By: {{ $post->user->name }}</small> --}}
 
+                        {{-- استدعاء الاسم لكل منشور سيزيد من التواصل 
+                            مع قاعدة البيانات في حال 
+                            لم يكن في الذاكرة المؤقتة --}}
                         @updated(['date' => $post->created_at, 'name' => $post->user->name])
                             {{--what ever here is shown as a value to slot variable  --}}
                             <i class="far fa-clock mr-2"></i>
@@ -145,7 +159,7 @@
     <div class="d-flex justify-content-center">
         <div>
 
-            {{$posts->render()}}
+            {{-- {{$posts->render()}} --}}
         </div>
     </div>
 @endsection

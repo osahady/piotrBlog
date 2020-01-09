@@ -18,7 +18,7 @@ class BlogPostPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        //by default this method returns false
     }
 
     /**
