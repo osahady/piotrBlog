@@ -146,7 +146,7 @@ class PostController extends Controller
     {
         //
         // $request->session()->reflash();
-        $this->authorize(BlogPost::find($id));//هذا يستدعي مزود التوثيق  الذي يستدعي سياسة المنشورات
+        // $this->authorize(BlogPost::find($id));//هذا يستدعي مزود التوثيق  الذي يستدعي سياسة المنشورات
 
         $blogPost = Cache::remember("blog-post-{$id}", 60, function() use ($id){
             return BlogPost::with('comments')->findOrFail($id);
@@ -158,7 +158,59 @@ class PostController extends Controller
         //     $query->latest();
         // }])->findOrFail($id)]);
 
-        return view('posts.show', ['post'=> $blogPost]);
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-{$id}-counter";
+        $usersKey = "blog-post-{$id}-users";
+
+        //سيتم إحضار مفتاح المستخدمين من الكاش 
+        // وفي حال عدم وجود هذا المفتاح سيعيد مصفوفة فارغة
+        $users = Cache::get($usersKey, []);
+        $usersUpdate = [];
+        $diffrence = 0;
+        $now = now();
+
+        foreach ($users as $session => $lastVisit) {
+            if ($now->diffInMinutes($lastVisit) >= 1) {
+                $diffrence--;
+            } else {
+                $usersUpdate[$session] = $lastVisit;
+            }
+            
+        }//end of foreach looping users
+
+        if (
+            !array_key_exists($sessionId, $users)
+            || $now->diffInMinutes($users[$sessionId]) >= 1
+        ) {
+            $diffrence++;
+        }
+
+        $usersUpdate[$sessionId] = $now;
+        Cache::forever($usersKey, $usersUpdate);
+
+        if(!Cache::has($counterKey)){
+            Cache::forever($counterKey, 1);
+        }else{
+
+            Cache::increment($counterKey, $diffrence);
+        }
+
+
+
+        $counter = Cache::get($counterKey);
+
+        echo $sessionId . '<br>'. 
+             $counterKey . '<br>' . 
+             $usersKey . '<br>' . 
+             $diffrence . '<br>' .
+             $now . '<br>';
+        
+        // dd($users, $usersUpdate);
+
+        return view('posts.show', [
+            'post'=> $blogPost,
+            'counter' => $counter,
+        ]);
     }
 
     /**

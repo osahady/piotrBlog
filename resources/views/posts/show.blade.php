@@ -25,7 +25,7 @@
         updated
     @endupdated
 
-
+    <p>Currently read by <strong> {{ $counter }} </strong>  people </p>
 
     <h4>Comments</h4>
 
