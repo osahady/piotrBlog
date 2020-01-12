@@ -146,6 +146,8 @@
             @slot('items', collect($mostActiveLastMonth)->pluck('name'))
         
         @endcard
+        
+
                 
     </div><!-- col-4 -->
 </div><!-- .row -->
