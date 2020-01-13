@@ -148,7 +148,7 @@ class PostController extends Controller
         // $request->session()->reflash();
         // $this->authorize(BlogPost::find($id));//هذا يستدعي مزود التوثيق  الذي يستدعي سياسة المنشورات
 
-        $blogPost = Cache::remember("blog-post-{$id}", 60, function() use ($id){
+        $blogPost = Cache::remember("blog-post-{$id}", 600, function() use ($id){
             return BlogPost::with('comments')->findOrFail($id);
         });
         //هذه إحدى طرق استدعاء الاستعلام المحلي في لارافيل
@@ -158,26 +158,24 @@ class PostController extends Controller
         //     $query->latest();
         // }])->findOrFail($id)]);
 
+        /* 
+        my code
         $sessionId = session()->getId();
         $counterKey = "blog-post-{$id}-counter";
         $usersKey = "blog-post-{$id}-users";
-
         //سيتم إحضار مفتاح المستخدمين من الكاش 
         // وفي حال عدم وجود هذا المفتاح سيعيد مصفوفة فارغة
         $users = Cache::get($usersKey, []);
         $usersUpdate = [];
         $diffrence = 0;
         $now = now();
-
         foreach ($users as $session => $lastVisit) {
             if ($now->diffInMinutes($lastVisit) >= 1) {
                 $diffrence--;
             } else {
                 $usersUpdate[$session] = $lastVisit;
-            }
-            
+            }            
         }//end of foreach looping users
-
         if (
             !array_key_exists($sessionId, $users)
             || $now->diffInMinutes($users[$sessionId]) >= 1
@@ -194,11 +192,7 @@ class PostController extends Controller
 
             Cache::increment($counterKey, $diffrence);
         }
-
-
-
         $counter = Cache::get($counterKey);
-
         echo $sessionId . '<br>'. 
              $counterKey . '<br>' . 
              $usersKey . '<br>' . 
@@ -206,9 +200,44 @@ class PostController extends Controller
              $now . '<br>';
         
         // dd($users, $usersUpdate);
-
         return view('posts.show', [
             'post'=> $blogPost,
+            'counter' => $counter,
+        ]);
+        */
+
+        //pioter code
+        $sessionId = session()->getId();
+        $counterKey = "blog-post-{$id}-counter";
+        $usersKey = "blog-post-{$id}-users";
+        $users = Cache::get($usersKey, []);
+        $usersUpdate = [];
+        $diffrence = 0;
+        $now = now();
+        foreach ($users as $session => $lastVisit) {
+            if ($now->diffInMinutes($lastVisit) >= 60) {
+                $diffrence--;
+            } else {
+                $usersUpdate[$session] = $lastVisit;
+            }
+        }//end looping users foreach
+        if(
+            !array_key_exists($sessionId, $users)
+            || $now->diffInMinutes($users[$sessionId]) >= 60
+        ) {
+            $diffrence++;
+        }
+        $usersUpdate[$sessionId] = $now;
+        Cache::forever($usersKey, $usersUpdate);
+        if (!Cache::has($counterKey)) {
+            Cache::forever($counterKey, 1);
+        } else {
+            Cache::increment($counterKey, $diffrence);
+        }
+        
+        $counter = Cache::get($counterKey);
+        return view('posts.show', [
+            'post' => $blogPost,
             'counter' => $counter,
         ]);
     }
