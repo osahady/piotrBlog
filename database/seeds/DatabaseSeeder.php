@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
             $this->command->call('migrate:refresh');
             $this->command->info('Database was refreshed');
         }
+
+        Cache::tags(['blog-post'])->flush();
+        
         $this->call([
                         UsersTableSeeder::class, 
                         BlogPostsTableSeeder::class, 
