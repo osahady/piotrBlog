@@ -216,7 +216,7 @@ class PostController extends Controller
         $now = now();
         foreach ($users as $session => $lastVisit) {
             if ($now->diffInMinutes($lastVisit) >= 60) {
-                $diffrence--;
+                $diffrence++;
             } else {
                 $usersUpdate[$session] = $lastVisit;
             }
