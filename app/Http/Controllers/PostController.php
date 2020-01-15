@@ -57,10 +57,7 @@ class PostController extends Controller
 
         // dd(DB::getQueryLog());
         return view('posts.index', 
-                    compact('posts', 
-                            'mostCommented', 
-                            'mostActive', 
-                            'mostActiveLastMonth') 
+                    compact('posts') 
                 );
     }
 
