@@ -13,9 +13,7 @@ class PostTagController extends Controller
 
         return view('posts.index', [
             'posts' => $tag->blogPosts,
-            'mostCommented' => [],
-            'mostActive' => [],
-            'mostActiveLastMonth' => []
+            
         ]);
     }
 }

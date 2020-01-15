@@ -52,16 +52,9 @@ class PostController extends Controller
         //وإلا قام باستدعاء التابع المجهول 
         // الذي بدوره يستدعي التعليمة التي تقوم بالتخاطب مع قاعدة البيانات
 
-        $mostCommented = Cache::tags(['blog-post'])->remember('mostComm', now()->addMinutes(60),  function(){
-           return BlogPost::mostCommented()->take(5)->get();
-        });
-        $mostActive = Cache::remember('mostActive', now()->addMinutes(60), function(){
-            return User::withMostBlogPosts()->take(5)->get();
-        });
+        //تم إلغاء الاستعلامات من هنا وإضافتها إلى ما يسمى
+        //composer view -> AppServiceProvider
 
-        $mostActiveLastMonth = Cache::remember('mostActiveLastMonth', now()->addMinutes(60), function(){
-            return User::withMostBlogPostsLastMonth()->take(5)->get();
-        });
         // dd(DB::getQueryLog());
         return view('posts.index', 
                     compact('posts', 
