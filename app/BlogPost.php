@@ -33,7 +33,7 @@ class BlogPost extends Model
     //creating tags relationship
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 
     public function scopeLatest(Builder $query)

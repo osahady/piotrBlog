@@ -87,6 +87,7 @@
                             <i class="far fa-clock mr-2"></i>
                         @endupdated
 
+                        @tags(['tags' => $post->tags])@endtags
                         @if ($post->comments_count)
                         <small class="ml-auto"><i class="fas fa-comment mr-1"></i>{{ $post->comments_count }}</small>
                         

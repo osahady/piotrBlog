@@ -9,6 +9,7 @@ class Tag extends Model
     
     public function blogPosts()
     {
-        return $this->belongsToMany('App\BlogPost');
+        //تستخدم طريقة الـ as لتغيير اسم البيفت 
+        return $this->belongsToMany('App\BlogPost')->withTimestamps()->as('tagged');
     }
 }

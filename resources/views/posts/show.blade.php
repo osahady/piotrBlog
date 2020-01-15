@@ -24,6 +24,7 @@
     @updated(['date' => $post->updated_at])
         updated
     @endupdated
+    @tags(['tags' => $post->tags])@endtags
 
     <p>Currently read by <strong> {{ $counter }} </strong>  people </p>
 

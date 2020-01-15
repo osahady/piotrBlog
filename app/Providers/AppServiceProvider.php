@@ -25,10 +25,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         // التعريف بالمكون: المعامل الأول هو مسار المكون،
-        //  والمعامل الثاني هو اسم المكون
+        //  والمعامل الثاني هو اسم المكون المزيف
         // حيث تم استخدام هذا المكون في ملف show.blade.php
         Blade::component('components.badge', 'badge');
         Blade::component('components.updated', 'updated');
         Blade::component('components.card', 'card');
+        Blade::component('components.tags', 'tags');
     }
 }
