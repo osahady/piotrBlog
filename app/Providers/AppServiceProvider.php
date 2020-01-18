@@ -28,10 +28,16 @@ class AppServiceProvider extends ServiceProvider
         // التعريف بالمكون: المعامل الأول هو مسار المكون،
         //  والمعامل الثاني هو اسم المكون المزيف
         // حيث تم استخدام هذا المكون في ملف show.blade.php
+
+        //يجب تسجيل جميع المكونات هنا
+        //بحيث يكون المعامل الأول هو مسار المكون
+        //والمعامل الثاني هو الاسم المزيف له
+        //ويمكن لك حينها استدائه من جيمع المناظر 
         Blade::component('components.badge', 'badge');
         Blade::component('components.updated', 'updated');
         Blade::component('components.card', 'card');
         Blade::component('components.tags', 'tags');
+        Blade::component('components.errors', 'errors');
 
         view()->composer(['posts.index', 'posts.show'], ActivityComposer::class);
     }

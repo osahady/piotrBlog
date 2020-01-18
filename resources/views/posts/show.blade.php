@@ -32,6 +32,7 @@
         <p>Currently read by <strong> {{ $counter }} </strong>  people </p>
 
         <h4>Comments</h4>
+        @include('comments._form')
 
         @forelse ($post->comments as $comment)
         <div class="media mb-5">
