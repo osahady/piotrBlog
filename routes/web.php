@@ -28,8 +28,11 @@
 Route::get('/', 'Home1Controller@home')->name('home1');
 
 Route::get('/contact', 'Home1Controller@contact')->name('contact');
-Route::resource('/posts', 'PostController');
+//عند إضافة مورد فيمكنك فقط إضافة اسم المورد
+Route::resource('posts', 'PostController');
 Route::get('/posts/tag/{tag}', 'PostTagController@index')->name('posts.tags.index');
+
+Route::resource('posts.comments', 'PostCommentController')->only(['store']);
 
 Route::get('/dashboard', 'PostController@dashboard')->name('dashboard');
 
