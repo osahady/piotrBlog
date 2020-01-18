@@ -40,7 +40,7 @@
                 {{-- <small class="text-muted">
                     added {{ $comment->created_at->diffForHumans() }}
                 </small> --}}
-                @updated(['date' => $post->created_at])
+                @updated(['date' => $comment->created_at, 'name' => $comment->user->name])
                                 {{--what ever here is shown as a value to slot variable  --}}
                                 <i class="far fa-clock mr-2"></i>
                 @endupdated
