@@ -7,6 +7,8 @@ use App\Http\Requests\StorePost;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class PostController extends Controller
 {
@@ -123,7 +125,13 @@ class PostController extends Controller
             dump($file->getClientOriginalExtension());
 
             dump($file->store('thumbnails'));
+            dump(Storage::disk('public')->putFile('thumbnails', $file));
 
+            $name1=$file->storeAs('thumbnails', $bp->id . '.' .$file->guessExtension());
+            $name2=Storage::disk('local')->putFileAs('thumbnails', $file, $bp->id . '.'.$file->guessExtension());
+            
+            dump(Storage::url($name1));
+            dump(Storage::disk('local')->url($name2));
         }
         die;
         // $this->authorize($bp);
