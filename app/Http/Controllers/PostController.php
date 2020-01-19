@@ -44,7 +44,7 @@ class PostController extends Controller
         // static::addGlobalScope(new LatestScope);
 
         //استدعاء المستخدمين سيخزن البيانات في الكاش
-        $posts = BlogPost::latest()->withCount('comments')->with('user')->with('tags')->get();
+        $posts = BlogPost::latestWithRelations()->get();
         // $mostCommented = BlogPost::mostCommented()->take(5)->get();
         //أسلوب التخزين المؤقت يعتمد على المفتاح والقيمة
         // المفتاح هنا هو المعامل الأول للتابع تذكر
@@ -138,8 +138,10 @@ class PostController extends Controller
         // $request->session()->reflash();
         // $this->authorize(BlogPost::find($id));//هذا يستدعي مزود التوثيق  الذي يستدعي سياسة المنشورات
 
-        $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 600, function() use ($id){
-            return BlogPost::with('comments')->with('tags')->with('user')->findOrFail($id);
+        $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 3600, 
+        function() use ($id){
+            return BlogPost::with('comments', 'tags', 'user', 'comments.user')           
+                ->findOrFail($id);
         });
         //هذه إحدى طرق استدعاء الاستعلام المحلي في لارافيل
         // وهناك طريقة أخرى أسهل منها وهي استدعاء الاستعلام المحلي

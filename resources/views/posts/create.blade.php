@@ -3,7 +3,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-6 offset-md-3">
-        <form action="{{ route('posts.store') }} " method="POST" >
+        <form action="{{ route('posts.store') }} " method="POST" enctype="multipart/form-data">
             @csrf
             @include('posts._form')
             <div class="form-group my-4">
