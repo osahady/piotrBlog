@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\BlogPost;
 use App\Http\Requests\StorePost;
+use App\Image;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -116,24 +117,12 @@ class PostController extends Controller
         $bp = BlogPost::create($vd);
         
 
-        $hasFile = $request->hasFile('thumbnail');
-        dump($hasFile);
-        if ($hasFile) {
-            $file = $request->file('thumbnail');
-            dump($file);
-            dump($file->getClientMimeType());
-            dump($file->getClientOriginalExtension());
-
-            dump($file->store('thumbnails'));
-            dump(Storage::disk('public')->putFile('thumbnails', $file));
-
-            $name1=$file->storeAs('thumbnails', $bp->id . '.' .$file->guessExtension());
-            $name2=Storage::disk('local')->putFileAs('thumbnails', $file, $bp->id . '.'.$file->guessExtension());
-            
-            dump(Storage::url($name1));
-            dump(Storage::disk('local')->url($name2));
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+            $bp->image()->save(
+                Image::create(['path'=>$path])
+            );
         }
-        die;
         // $this->authorize($bp);
 
         // $user->posts()->save($bp);
