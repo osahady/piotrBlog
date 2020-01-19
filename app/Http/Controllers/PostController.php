@@ -114,6 +114,18 @@ class PostController extends Controller
         $bp = BlogPost::create($vd);
         
 
+        $hasFile = $request->hasFile('thumbnail');
+        dump($hasFile);
+        if ($hasFile) {
+            $file = $request->file('thumbnail');
+            dump($file);
+            dump($file->getClientMimeType());
+            dump($file->getClientOriginalExtension());
+
+            dump($file->store('thumbnails'));
+
+        }
+        die;
         // $this->authorize($bp);
 
         // $user->posts()->save($bp);
