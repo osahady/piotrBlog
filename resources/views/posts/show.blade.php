@@ -12,8 +12,6 @@
                 Brand New Post!
             @endbadge    
         </h3>
-        <img src="http://piotrblog.test/storage/{{ $post->image->path }} " class="img-fluid" alt="">
-        <img src="{{ asset($post->image->path) }} " alt="not found">
         <img src="{{ $post->image->url() }} " alt="" class="img-fluid">
         <p>{{ $post->content }}</p>
 

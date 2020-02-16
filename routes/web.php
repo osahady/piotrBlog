@@ -35,6 +35,7 @@ Route::get('/posts/tag/{tag}', 'PostTagController@index')->name('posts.tags.inde
 Route::resource('posts.comments', 'PostCommentController')->only(['store']);
 
 Route::get('/dashboard', 'PostController@dashboard')->name('dashboard');
+Route::resource('users', 'UserController')->only(['show', 'edit', 'update']);
 
 //تم إضافة البرمجية الوسيطة لحماية المسار
 // فلن يستطيع المتطفل (المستعبط) الذهاب إلى المسار 

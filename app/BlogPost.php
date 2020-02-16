@@ -15,7 +15,8 @@ class BlogPost extends Model
 {
     use SoftDeletes;
     //    protected $table = 'blogposts';
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $fillable = ['title', 'content', 'user_id'];
 
     public function user()
     {
@@ -68,6 +69,8 @@ class BlogPost extends Model
 
         // //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
         // //عبر تنفيذ الواجهة العالمية Scope
+
+
 
         static::deleting(function(BlogPost $blogPost){
             $blogPost->comments()->delete();
