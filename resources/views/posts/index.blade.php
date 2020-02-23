@@ -82,7 +82,7 @@
                         {{-- استدعاء الاسم لكل منشور سيزيد من التواصل 
                             مع قاعدة البيانات في حال 
                             لم يكن في الذاكرة المؤقتة --}}
-                        @updated(['date' => $post->created_at, 'name' => $post->user->name])
+                        @updated(['date' => $post->created_at, 'name' => $post->user->name, 'userId' => $post->user->id])
                             {{--what ever here is shown as a value to slot variable  --}}
                             <i class="far fa-clock mr-2"></i>
                         @endupdated
