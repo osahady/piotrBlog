@@ -37,6 +37,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
 
     public function posts()
     {
@@ -47,6 +48,12 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\User');
     }
+
+    public function image()
+    {
+        return $this->morphOne('App\Image', 'imageable');
+    }
+
 
     public function scopeWithMostBlogPosts(Builder $query)
     {
