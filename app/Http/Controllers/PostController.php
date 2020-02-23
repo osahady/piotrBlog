@@ -120,7 +120,7 @@ class PostController extends Controller
         if ($request->hasFile('thumbnail')) {
             $path = $request->file('thumbnail')->store('thumbnails');
             $bp->image()->save(
-                Image::create(['path'=>$path])
+                Image::make(['path'=>$path])
             );
         }
         // $this->authorize($bp);
@@ -335,7 +335,7 @@ class PostController extends Controller
                 $post->image->save();
             }else{
                 $post->image()->save(
-                    Image::create(['path'=>$path])
+                    Image::make(['path'=>$path])
                 );
             }
         }
