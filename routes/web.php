@@ -33,6 +33,7 @@ Route::resource('posts', 'PostController');
 Route::get('/posts/tag/{tag}', 'PostTagController@index')->name('posts.tags.index');
 
 Route::resource('posts.comments', 'PostCommentController')->only(['store']);
+Route::resource('users.comments', 'UserCommentController')->only(['store']);
 
 Route::get('/dashboard', 'PostController@dashboard')->name('dashboard');
 Route::resource('users', 'UserController')->only(['show', 'edit', 'update']);
