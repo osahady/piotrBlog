@@ -44,7 +44,7 @@ class Comment extends Model
         static::creating(function(Comment $comment){
             //تنفيذ التعليمة على جميع المنشورات التي
             // تحتوي على وسم "منشور-مدونة" لكي يتم حذفها من الكاش
-            if ($comment->commentable_type === App\BlogPost::class) {
+            if ($comment->commentable_type === BlogPost::class) {
                 
                 Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
                 Cache::tags(['blog-post'])->forget('mostCommented');
