@@ -41,13 +41,16 @@ class PostTest extends TestCase
 
     public function testSee1BlogPostWithComments()
     {
+        $user = $this->user();
         //arrange  إنشاء المقالة بواسطة تابع جاهز 
         //createDummyBlogPost();
         $post = $this->createDummyBlogPost();
 
         //إنشاء أربعة تعليقات للمقالة بواسطة المعمل 
         factory(Comment::class, 4)->create([
-            'blog_post_id' => $post->id
+            'commentable_id' => $post->id,
+            'commentable_type' => 'App\BlogPost',
+            'user_id' => $user->id
         ]);
 
         //Act
