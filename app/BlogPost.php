@@ -34,7 +34,7 @@ class BlogPost extends Model
     //creating tags relationship
     public function tags()
     {
-        return $this->belongsToMany('App\Tag')->withTimestamps();
+        return $this->morphToMany('App\Tag', 'taggable')->withTimestamps();
     }
 
     public function image()
