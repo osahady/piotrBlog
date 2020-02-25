@@ -12,7 +12,9 @@
                 Brand New Post!
             @endbadge    
         </h3>
-        <img src="{{ $post->image->url() }} " alt="" class="img-fluid">
+        @if ($post->image)
+            <img src="{{ $post->image->url() }} " alt="" class="img-fluid">
+        @endif
         <p>{{ $post->content }}</p>
 
         {{-- <small>Add at {{ $post->created_at->diffForHumans() }}</small>  --}}

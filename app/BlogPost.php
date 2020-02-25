@@ -6,6 +6,7 @@ namespace App;
 
 use App\Scopes\DeletedAdminScope;
 use App\Scopes\LatestScope;
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
     //    protected $table = 'blogposts';
     // protected $guarded = [];
     protected $fillable = ['title', 'content', 'user_id'];
@@ -31,11 +32,7 @@ class BlogPost extends Model
         return $this->morphMany('App\Comment', 'commentable')->latest();
     }
 
-    //creating tags relationship
-    public function tags()
-    {
-        return $this->morphToMany('App\Tag', 'taggable')->withTimestamps();
-    }
+   
 
     public function image()
     {

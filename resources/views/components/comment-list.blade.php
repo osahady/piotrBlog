@@ -11,6 +11,8 @@
                         <i class="far fa-clock mr-2"></i>
         @endupdated
         <div>{{ $comment->content }}</div>
+        @tags(['tags' => $comment->tags])@endtags
+
     </div>
 </div> 
 @empty
