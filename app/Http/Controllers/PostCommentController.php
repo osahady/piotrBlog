@@ -6,6 +6,7 @@ use App\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreComment;
 use App\Mail\CommentPosted;
+use App\Mail\CommentPostedMarkdown;
 use Illuminate\Support\Facades\Mail;
 
 class PostCommentController extends Controller
@@ -29,7 +30,7 @@ class PostCommentController extends Controller
         // and the send member method invoke the build method 
         //inside CommentPosted instance 
         Mail::to($post->user)->send(
-            new CommentPosted($comment)
+            new CommentPostedMarkdown($comment)
         );
         // $request->session()->flash('success', 'Commnet was created');
 

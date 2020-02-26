@@ -18,6 +18,7 @@
 <hr>
 
 <p>
+  {{-- هنا إرفاق صورة عبر البريد الإلكتروني المرسل --}}
   <img src="{{ $message->embed($comment->user->image->url()) }} " alt="">
   <a href="{{ route('users.show', ['user'=>$comment->user->id]) }} ">
     {{ $comment->user->name }}
