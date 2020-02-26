@@ -38,6 +38,10 @@ Route::resource('users.comments', 'UserCommentController')->only(['store']);
 Route::get('/dashboard', 'PostController@dashboard')->name('dashboard');
 Route::resource('users', 'UserController')->only(['show', 'edit', 'update']);
 
+Route::get('mailable', function(){
+  $comment = App\Comment::find(1);
+  return new App\Mail\CommentPostedMarkdown($comment);
+});
 //تم إضافة البرمجية الوسيطة لحماية المسار
 // فلن يستطيع المتطفل (المستعبط) الذهاب إلى المسار 
 // حتى لو كتبه 
