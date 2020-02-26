@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreComment;
+use App\Mail\CommentPosted;
+use Illuminate\Support\Facades\Mail;
 
 class PostCommentController extends Controller
 {
@@ -18,11 +20,17 @@ class PostCommentController extends Controller
     }
     public function store(BlogPost $post, StoreComment $request)
     {
-        $post->comments()->create([
+        $comment = $post->comments()->create([
             'content' => $request->input('content'),
             'user_id' => $request->user()->id
         ]);
 
+        //this method invoke app\Mail\CommentPosted.php 
+        // and the send member method invoke the build method 
+        //inside CommentPosted instance 
+        Mail::to($post->user)->send(
+            new CommentPosted($comment)
+        );
         // $request->session()->flash('success', 'Commnet was created');
 
         return redirect()->back()->with('success', 'Comment was created');
