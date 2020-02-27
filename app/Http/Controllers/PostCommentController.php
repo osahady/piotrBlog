@@ -29,9 +29,20 @@ class PostCommentController extends Controller
         //this method invoke app\Mail\CommentPosted.php 
         // and the send member method invoke the build method 
         //inside CommentPosted instance 
-        Mail::to($post->user)->send(
+
+        // Mail::to($post->user)->send(
+        //     new CommentPostedMarkdown($comment)
+        // );
+
+        Mail::to($post->user)->queue(
             new CommentPostedMarkdown($comment)
         );
+
+        // $when = now()->addMinutes(1);
+        // Mail::to($post->user)->later(
+        //     $when,
+        //     new CommentPostedMarkdown($comment)
+        // );
         // $request->session()->flash('success', 'Commnet was created');
 
         return redirect()->back()->with('success', 'Comment was created');
