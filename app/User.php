@@ -46,7 +46,7 @@ class User extends Authenticatable
     
     public function comments()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\Comment');
     }
 
     public function commentsOn()
@@ -75,7 +75,7 @@ class User extends Authenticatable
 
     public function scopeThatHasCommentedOnPost(Builder $query, BlogPost $post)
     {
-       return $query->whereHas('comments', function($query) use($post){
+       return $query->whereHas('comments', function($query) use ($post){
         return $query->where('commentable_id', '=', $post->id)
             ->where('commentable_type', '=', BlogPost::class);
        });
