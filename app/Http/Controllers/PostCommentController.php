@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
-use App\Mail\CommentPosted;
-use Illuminate\Http\Request;
+use App\Jobs\ThrottledMail;
 use App\Http\Requests\StoreComment;
 use App\Mail\CommentPostedMarkdown;
-use Illuminate\Support\Facades\Mail;
 use App\Jobs\NotifyUsersPostWasCommented;
 
 class PostCommentController extends Controller
@@ -35,10 +33,11 @@ class PostCommentController extends Controller
         //     new CommentPostedMarkdown($comment)
         // );
 
-        Mail::to($post->user)->queue(
-            new CommentPostedMarkdown($comment)
-        );
+        // Mail::to($post->user)->queue(
+            
+        // );
 
+        ThrottledMail::dispatch(new CommentPostedMarkdown($comment), $post->user);
         NotifyUsersPostWasCommented::dispatch($comment);
 
         // $when = now()->addMinutes(1);
