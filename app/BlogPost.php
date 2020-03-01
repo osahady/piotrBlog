@@ -32,8 +32,6 @@ class BlogPost extends Model
         return $this->morphMany('App\Comment', 'commentable')->latest();
     }
 
-   
-
     public function image()
     {
         return $this->morphOne('App\Image', 'imageable');
@@ -63,25 +61,7 @@ class BlogPost extends Model
     {
         static::addGlobalScope(new DeletedAdminScope);
         parent::boot();
-
-        // //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
-        // //عبر تنفيذ الواجهة العالمية Scope
-
-
-
-        static::deleting(function(BlogPost $blogPost){
-            $blogPost->comments()->delete();
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-
-        });
-
-        static::updating(function(BlogPost $blogPost){
-            Cache::tags(['blog-post'])->forget("blog-post-{$blogPost->id}");
-        });
-
-        static::restoring(function (BlogPost $blogPost){
-            $blogPost->comments()->restore();
-        });
+        
     }
 
    

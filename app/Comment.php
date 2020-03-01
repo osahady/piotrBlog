@@ -7,7 +7,6 @@ use App\Scopes\LatestScope;
 use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
 use SebastianBergmann\CodeCoverage\Node\Builder;
 
 class Comment extends Model
@@ -34,26 +33,5 @@ class Comment extends Model
         return $query->orderBy(static::CREATED_AT, 'desc');
     }
 
-    public static function boot()
-    {
-        parent::boot();
-
-        //تسجيل النطاق العالمي في النوذج بعد إنشاء صف LatestScope
-        //عبر تنفيذ الواجهة العالمية Scope
-        // static::addGlobalScope(new LatestScope);
-
-
-        //عند إضافة تعليق ينبغي حذف المنشور من الذاكرة المؤقتة
-        static::creating(function(Comment $comment){
-            //تنفيذ التعليمة على جميع المنشورات التي
-            // تحتوي على وسم "منشور-مدونة" لكي يتم حذفها من الكاش
-            if ($comment->commentable_type === BlogPost::class) {
-                
-                Cache::tags(['blog-post'])->forget("blog-post-{$comment->commentable_id}");
-                Cache::tags(['blog-post'])->forget('mostCommented');
-            }
-
-        });
-
-    }
+    
 }

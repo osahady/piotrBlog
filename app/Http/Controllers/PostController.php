@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
+use App\Events\BlogPostPosted;
 use App\Http\Requests\StorePost;
 use App\Image;
 use App\User;
@@ -131,7 +132,8 @@ class PostController extends Controller
         //with() تقوم بإنشاء جلسة عالطاير وترسلها مع المسار إلى الصفحة المطلوبة
         //مع إرسال اسم الجلسة في المعامل الأول وقيمة الجلسة في المعامل الثاني
 
-       return redirect()->route('posts.show', ['post'=>$bp->id])->with('success', 'Blog Post was created!');
+        event(new BlogPostPosted($bp));
+        return redirect()->route('posts.show', ['post'=>$bp->id])->with('success', 'Blog Post was created!');
         
     }
 
