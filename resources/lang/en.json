@@ -1,4 +1,14 @@
 {
   "Welcome to Laravel!": "Welcome to Laravel!",
-  "Hello :name" : "Hello :name"
+  "Hello :name" : "Hello :name",
+  "Home" : "Home",
+  "Dashboard" : "Dashboard",
+  "Create a Post" : "Create a Post",
+  "Contact" : "Contact",
+  "Blog Posts" : "Blog Posts",
+  "Login": "Login",
+  "Logout": "Logout",
+  "Profile" : "Profile",
+  "Edit Profile" : "Edit Profile"
+
 }

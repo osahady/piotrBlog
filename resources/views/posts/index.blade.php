@@ -88,12 +88,14 @@
                         @endupdated
 
                         @tags(['tags' => $post->tags])@endtags
-                        @if ($post->comments_count)
+                        {{-- @if ($post->comments_count)
                         <small class="ml-auto"><i class="fas fa-comment mr-1"></i>{{ $post->comments_count }}</small>
                         
                         @else   
                             <small class="ml-auto"><i class="fas fa-comment mr-1"></i>no comments</small>
-                            @endif
+                        @endif --}}
+
+                        {{ trans_choice('messages.comments', $post->comments_count) }}
                     </div>
                 </div><!-- .card-footer -->
             </div> <!--.card -->

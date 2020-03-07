@@ -29,7 +29,10 @@
         @endupdated
         @tags(['tags' => $post->tags])@endtags
 
-        <p>Currently read by <strong> {{ $counter }} </strong>  people </p>
+        {{-- <p>Currently read by <strong> {{ $counter }} </strong>  people </p> --}}
+        <p>
+            {{ trans_choice('messages.people.reading', $counter) }}
+        </p>
 
         <h4>Comments</h4>
         @commentForm(['route'=>route('posts.comments.store', ['post' => $post->id])])

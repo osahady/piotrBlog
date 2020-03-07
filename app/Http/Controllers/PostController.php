@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BlogPost;
+use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
 use App\Http\Requests\StorePost;
 use App\Image;
@@ -14,8 +15,9 @@ use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class PostController extends Controller
 {
+    private $counter;
     //يقوم هذا الباني البرمجية الوسيطة
-    public function __construct()
+    public function __construct(CounterContract $counter)
     {
         //تقوم البرمجية الوسيطة بإعطاء المستخدمين المسجلين الموثوقين
         // سماحية الوصول للوظائف التالية 
@@ -26,6 +28,8 @@ class PostController extends Controller
 
         //تمّ اختصار اسم البرمجية الوسيطة عن طريق ملف kernal.php
         //
+        // $this->middleware('locale');
+        $this->counter = $counter;
     }
     /**
      * Display a listing of the resource.
@@ -210,38 +214,10 @@ class PostController extends Controller
         */
 
         //pioter code
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
-        $users = Cache::tags(['blog-post'])->get($usersKey, []);
-        $usersUpdate = [];
-        $diffrence = 0;
-        $now = now();
-        foreach ($users as $session => $lastVisit) {
-            if ($now->diffInMinutes($lastVisit) >= 60) {
-                $diffrence++;
-            } else {
-                $usersUpdate[$session] = $lastVisit;
-            }
-        }//end looping users foreach
-        if(
-            !array_key_exists($sessionId, $users)
-            || $now->diffInMinutes($users[$sessionId]) >= 60
-        ) {
-            $diffrence++;
-        }
-        $usersUpdate[$sessionId] = $now;
-        Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);
-        if (!Cache::tags(['blog-post'])->has($counterKey)) {
-            Cache::tags(['blog-post'])->forever($counterKey, 1);
-        } else {
-            Cache::tags(['blog-post'])->increment($counterKey, $diffrence);
-        }
-        
-        $counter = Cache::tags(['blog-post'])->get($counterKey);
+        // $counter = resolve(Counter::class);
         return view('posts.show', [
             'post' => $blogPost,
-            'counter' => $counter,
+            'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post']),
         ]);
     }
 

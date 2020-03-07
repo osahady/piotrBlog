@@ -31,13 +31,13 @@
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4">
           <h5 class="my-0 mr-md-auto font-weight-normal">Laravel Blog</h5>
             <nav class="my-2 my-md-0 mr-md-3">  
-                <a class="p-2 text-dark" href="{{ route('home1') }}">Home</a>
+                <a class="p-2 text-dark" href="{{ route('home1') }}">{{ __('Home') }} </a>
                 @if (Auth::user())                    
-                    <a class="p-2 text-dark" href="{{ route('dashboard') }}">Dashboard</a>
-                    <a class="p-2 text-dark" href="{{ route('posts.create') }}">Create a Post</a>
+                    <a class="p-2 text-dark" href="{{ route('dashboard') }}">{{ __('Dashboard') }} </a>
+                    <a class="p-2 text-dark" href="{{ route('posts.create') }}">{{ __('Create a Post') }} </a>
                 @endif
-                <a class="p-2 text-dark" href="{{ route('contact') }}">Contact</a>
-                <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
+                <a class="p-2 text-dark" href="{{ route('contact') }}">{{ __('Contact') }} </a>
+                <a class="p-2 text-dark" href="{{ route('posts.index') }}">{{ __('Blog Posts') }} </a>
             </nav>
                 <!-- Right Side Of Navbar -->
                
@@ -52,6 +52,13 @@
                           
                         @endif
                     @else
+                        <a class="p-2 text-dark" href="{{ route('users.show', ['user'=> Auth::user()->id]) }}">
+                            {{ __('Profile') }} 
+                        </a>
+                        <a class="p-2 text-dark" href="{{ route('users.edit', ['user'=> Auth::user()->id]) }}">
+                            {{ __('Edit Profile') }} 
+                        </a>
+
                         <div class="dropdown">
                             <a id="xyz" class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 {{ Auth::user()->name }} <span class="caret"></span>

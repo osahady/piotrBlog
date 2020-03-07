@@ -11,6 +11,13 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public const LOCALES = [
+        'en'=> 'English',
+        'ar' => 'عربي',
+        'tr' => 'Türkçe',
+        'de' =>'Deutsch'
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
