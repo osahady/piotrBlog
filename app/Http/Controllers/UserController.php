@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\CounterContract;
-use App\Http\Requests\UpdateUser;
+use App\User;
 use App\Image;
 use App\Services\Counter;
-use App\User;
 use Illuminate\Http\Request;
+use App\Facades\CounterFacade;
+use App\Http\Requests\UpdateUser;
+use App\Contracts\CounterContract;
 
 class UserController extends Controller
 {
     private $counter;
     //create a constructor
-    public function __construct(CounterContract $counter)
+    public function __construct()
     {
         $this->middleware('auth');
         $this->authorizeResource(User::class, 'user');
-        $this->counter = $counter;
     }
     /**
      * Display a listing of the resource.
@@ -60,8 +60,8 @@ class UserController extends Controller
     {
 
         return view('users.show', [
-            'user'=> $user,
-            'counter' => $this->counter->increment("user-{$user->id}")
+            'user'=> $user, 
+            'counter' => CounterFacade::increment("user-{$user->id}")
             ]);
     }
 

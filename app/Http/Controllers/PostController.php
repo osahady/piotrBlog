@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BlogPost;
 use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
+use App\Facades\CounterFacade;
 use App\Http\Requests\StorePost;
 use App\Image;
 use App\User;
@@ -17,7 +18,7 @@ class PostController extends Controller
 {
     private $counter;
     //يقوم هذا الباني البرمجية الوسيطة
-    public function __construct(CounterContract $counter)
+    public function __construct()
     {
         //تقوم البرمجية الوسيطة بإعطاء المستخدمين المسجلين الموثوقين
         // سماحية الوصول للوظائف التالية 
@@ -29,7 +30,6 @@ class PostController extends Controller
         //تمّ اختصار اسم البرمجية الوسيطة عن طريق ملف kernal.php
         //
         // $this->middleware('locale');
-        $this->counter = $counter;
     }
     /**
      * Display a listing of the resource.
@@ -217,7 +217,7 @@ class PostController extends Controller
         // $counter = resolve(Counter::class);
         return view('posts.show', [
             'post' => $blogPost,
-            'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post']),
+            'counter' => CounterFacade::increment("blog-post-{$id}", ['blog-post']),
         ]);
     }
 
