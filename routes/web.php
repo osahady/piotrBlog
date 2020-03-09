@@ -47,7 +47,7 @@ Route::get('mailable', function(){
 // حتى لو كتبه 
 Route::get('/secret', 'Home1Controller@secret')
 ->name('secret')
-->middleware('can:home1.secret');
+->middleware('can:home1.secret'); //the name of the Gate (AuthServiceProvider)
 
 
 
