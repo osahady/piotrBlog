@@ -16,6 +16,10 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'content'];
 
+    //laravel is smart enough to hide every thing in this array
+    //so that it does not appear in json response
+    protected $hidden = ['deleted_at', 'commentable_type', 'commentable_id', 'user_id'];
+
     public function commentable()
     {
         return $this->morphTo();
