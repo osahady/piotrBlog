@@ -13,7 +13,7 @@ class HomeTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSeeText('Welcome to laravel');
+        $response->assertSeeText('Welcome to Laravel');
         $response->assertSeeText('This is the content of the main page!');
     }
 
