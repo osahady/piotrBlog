@@ -32,7 +32,7 @@ class BlogPostPolicy
     {
         //هذا يعني أن لكل مستخدم أحقية رؤية منشوراته فقط
         //أو يمكن للمدير أيضا رؤية المنشورات أيضا
-        return $user->id == $blogPost->user_id || $user->is_admin;
+        return $user->id === $blogPost->user_id || $user->is_admin;
     }
 
     /**
@@ -60,7 +60,7 @@ class BlogPostPolicy
     public function update(User $user, BlogPost $blogPost)
     {
         //يعني أن هذا المنشور هو ملك لك
-        return $user->id == $blogPost->user_id;
+        return $user->id === $blogPost->user_id;
     }
 
     /**
@@ -73,7 +73,7 @@ class BlogPostPolicy
     public function delete(User $user, BlogPost $blogPost)
     {
         //يعني أن هذا المنشور هو ملك لك
-        return $user->id == $blogPost->user_id;
+        return $user->id === $blogPost->user_id;
     }
 
     /**

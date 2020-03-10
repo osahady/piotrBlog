@@ -16,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
         'App\BlogPost' => 'App\Policies\BlogPostPolicy',
-        'App\User' => 'App\Policies\UserPolicy'
+        'App\User' => 'App\Policies\UserPolicy',
+        'App\Comment' => 'App\Policies\CommentPolicy'
     ];
 
     /**
@@ -50,9 +51,9 @@ class AuthServiceProvider extends ServiceProvider
         //posts.create, posts.view, posts.update, posts.delete
 
         Gate::before(function($user, $ability){
-            // if($user->is_admin && in_array($ability, ['update', 'delete'])){
-            //     return true;
-            // }
+            if($user->is_admin && in_array($ability, ['update', 'delete'])){
+                return true;
+            }
         });
 
         // Gate::after(function($user, $ability, $result){
